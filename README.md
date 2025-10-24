@@ -4,3 +4,11 @@
 
 
 https://www.kaggle.com/datasets/jmmvutu/ecommerce-users-of-a-french-c2c-fashion-store
+
+
+
+
+
+Brancharli temizle
+yeni branchlar ac 
+insanlara manueli yolla ona gore gelistirmeye basla
