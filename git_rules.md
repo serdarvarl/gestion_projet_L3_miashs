@@ -11,7 +11,6 @@
 
 ## 🌿 Modèle de branches
 
-```
 main  ←  dev  ←  feature/*
 ```
 
