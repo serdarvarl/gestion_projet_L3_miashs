@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Data Moode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #6B3FB8 0%, #9333ea 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-box {
+            background: white;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #6B3FB8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6B3FB8;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #6B3FB8;
+            box-shadow: 0 0 0 3px rgba(107, 63, 184, 0.1);
+        }
+
+        .message-alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-success.show,
+        .alert-error.show {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #6B3FB8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #6B3FB8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(107, 63, 184, 0.1);
+            border-top: 3px solid #6B3FB8;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+
+        <div class="form-box">
+            <div class="form-header">
+                <div class="logo">
+                    <div class="logo-icon">📊</div>
+                    <div class="logo-text">Data Moode</div>
+                </div>
+                <h1>Créer un compte</h1>
+                <p>Inscrivez-vous pour commencer</p>
+            </div>
+
+            <div id="message" class="message-alert"></div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+                    <input type="text" id="name" name="name" required placeholder="Jean Dupont">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="email" required placeholder="vous@exemple.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required placeholder="Minimum 8 caractères">
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirm">Confirmer mot de passe</label>
+                    <input type="password" id="password_confirm" name="password_confirm" required placeholder="Confirmez votre mot de passe">
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px; color: #6B3FB8;">Création en cours...</p>
+                </div>
+
+                <button type="submit" id="submitBtn">Créer un compte</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Vous avez déjà un compte ? <a href="login.html">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signupForm');
+        const messageDiv = document.getElementById('message');
+        const loading = document.getElementById('loading');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirm').value;
+
+            // Validation côté client
+            if (!name || !email || !password || !passwordConfirm) {
+                showMessage('Tous les champs sont requis', 'error');
+                return;
+            }
+
+            if (password.length < 8) {
+                showMessage('Le mot de passe doit avoir au minimum 8 caractères', 'error');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                showMessage('Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+
+            // Montrer le spinner
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+
+            // AJAX REQUEST
+            fetch('api/signup.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'name=' + encodeURIComponent(name) + 
+                      '&email=' + encodeURIComponent(email) + 
+                      '&password=' + encodeURIComponent(password)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    form.reset();
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+                showMessage('Erreur: ' + error.message, 'error');
+            });
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.classList.remove('alert-success', 'alert-error', 'show');
+            messageDiv.classList.add('alert-' + type, 'show');
+        }
+    </script>
+</body>
+</html>

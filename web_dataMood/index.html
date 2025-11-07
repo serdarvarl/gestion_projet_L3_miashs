@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Moode - Dashboard d'analyse comportementale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* HEADER */
+        header {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #6B3FB8;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #6B3FB8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #6B3FB8;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #6B3FB8;
+            color: #6B3FB8;
+        }
+
+        .btn-outline:hover {
+            background: #f3e8ff;
+        }
+
+        .btn-primary {
+            background: #6B3FB8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3e8ff;
+            border-radius: 50px;
+            color: #6B3FB8;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #581c87, #7c3aed, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-subtext {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* DASHBOARD PREVIEW */
+        .dashboard-preview {
+            margin-top: 50px;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-header {
+            background: linear-gradient(to bottom right, #7c3aed, #5b21b6);
+            padding: 30px;
+        }
+
+        .dashboard-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card.purple {
+            background: #f3e8ff;
+        }
+
+        .stat-card.blue {
+            background: #dbeafe;
+        }
+
+        .stat-card.green {
+            background: #dcfce7;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            background: #f9fafb;
+            padding: 80px 30px;
+        }
+
+        .features h2,
+        .pricing h2,
+        .cta h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .features p,
+        .pricing p,
+        .cta p {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #6B3FB8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* PRICING SECTION */
+        .pricing {
+            padding: 80px 30px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            border: 2px solid #e5e7eb;
+            position: relative;
+        }
+
+        .pricing-card.pro {
+            background: #6B3FB8;
+            color: white;
+            border: none;
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .price-period {
+            color: #666;
+        }
+
+        .pricing-card.pro .price-period {
+            color: #e9d5ff;
+        }
+
+        .pricing-description {
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .pricing-card.pro .pricing-description {
+            color: #e9d5ff;
+        }
+
+        .pricing-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-list li {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .pricing-card.pro .pricing-list li {
+            color: white;
+        }
+
+        .pricing-card button {
+            width: 100%;
+        }
+
+        /* CTA SECTION */
+        .cta {
+            background: #6B3FB8;
+            padding: 80px 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #e9d5ff;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: #6B3FB8;
+        }
+
+        .cta .btn-outline {
+            border-color: white;
+            color: white;
+        }
+
+        .cta .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📊</div>
+                <span class="logo-text">Data Moode</span>
+            </a>
+            <div class="header-buttons">
+                <a href="login.html" class="btn btn-outline">Se connecter</a>
+                <a href="signup.html" class="btn btn-primary">Commencer gratuitement</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">⚡ Analyse comportementale en temps réel</div>
+            <h1>Transformez vos données clients en insights actionnables</h1>
+            <p>Data Moode est le dashboard d'analyse comportementale qui vous permet de comprendre vos utilisateurs en profondeur et prendre les bonnes décisions, rapidement.</p>
+
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn btn-primary btn-lg">Démarrer gratuitement →</a>
+                <a href="login.html" class="btn btn-outline btn-lg">Voir une démo</a>
+            </div>
+            <p class="hero-subtext">Aucune carte bancaire requise • Accès immédiat</p>
+
+            <!-- DASHBOARD PREVIEW -->
+            <div class="dashboard-preview">
+                <div class="dashboard-header">
+                    <div class="dashboard-content">
+                        <div class="stat-card purple">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-number">+42%</div>
+                            <div class="stat-label">Croissance mensuelle</div>
+                        </div>
+                        <div class="stat-card blue">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-number">12.4K</div>
+                            <div class="stat-label">Utilisateurs actifs</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">🌍</div>
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Pays couverts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features">
+        <div class="container">
+            <h2>Tout ce dont vous avez besoin</h2>
+            <p>Des analyses prêtes à l'emploi et des outils personnalisables</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analyses pré-configurées</h3>
+                    <p>6 cartes d'analyse essentielles prêtes à l'emploi</p>
+                    <ul class="feature-list">
+                        <li>✓ Comparaison avant/après</li>
+                        <li>✓ Top pays & régions</li>
+                        <li>✓ Analyse démographique</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Analyses personnalisées</h3>
+                    <p>Créez vos propres analyses facilement</p>
+                    <ul class="feature-list">
+                        <li>✓ Variables illimitées</li>
+                        <li>✓ Graphiques interactifs</li>
+                        <li>✓ Export PDF & PNG</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Sécurité & Performance</h3>
+                    <p>Vos données sécurisées, analyses en temps réel</p>
+                    <ul class="feature-list">
+                        <li>✓ Données chiffrées</li>
+                        <li>✓ Analyses temps réel</li>
+                        <li>✓ API intégration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Choisissez le plan qui vous convient</h2>
+            <p>Commencez gratuitement, passez en PRO quand vous êtes prêt</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price">0€<span class="price-period">/mois</span></div>
+                    <p class="pricing-description">Parfait pour découvrir Data Moode</p>
+                    <ul class="pricing-list">
+                        <li>✓ 6 cartes d'analyse pré-configurées</li>
+                        <li>✓ Graphiques interactifs</li>
+                        <li>✓ Support communautaire</li>
+                    </ul>
+                    <a href="signup.html" class="btn btn-outline" style="width: 100%;">Commencer gratuitement</a>
+                </div>
+
+                <div class="pricing-card pro">
+                    <div class="pricing-badge">Populaire</div>
+                    <h3>Pro</h3>
+                    <div class="price">29€<span class="price-period">/mois</span></div>
+                    <p class="pricing-description">Pour les équipes qui veulent aller plus loin</p>
+                    <ul class="pricing-list">
+                        <li>✓ Toutes les fonctionnalités Free</li>
+                        <li>✓ Analyses personnalisées illimitées</li>
+                        <li>✓ Export PDF & PNG</li>
+                        <li>✓ Accès API complet</li>
+                        <li>✓ Support prioritaire</li>
+                    </ul>
+                    <a href="signup.html" class="btn btn-primary" style="width: 100%;">Essayer PRO gratuitement</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta">
+        <div class="container">
+            <h2>Prêt à transformer vos données en insights ?</h2>
+            <p>Rejoignez les équipes qui utilisent Data Moode pour mieux comprendre leurs utilisateurs</p>
+            <div class="cta-buttons">
+                <a href="signup.html" class="btn btn-primary btn-lg">Commencer maintenant →</a>
+                <a href="login.html" class="btn btn-outline btn-lg">Se connecter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Data Moode. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html>
