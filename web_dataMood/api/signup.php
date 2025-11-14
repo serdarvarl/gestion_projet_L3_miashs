@@ -1,15 +1,20 @@
 <?php
 header('Content-Type: application/json');
 
+// Démarrer la session
+session_start();
+
 // Récupérer les données POST
 $name = $_POST['name'] ?? '';
+$firstname = $_POST['firstname'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+
 
 // ========== VALIDATIONS ==========
 
 // 1. Vérifier que tous les champs sont remplis
-if (empty($name) || empty($email) || empty($password)) {
+if (empty($name) || empty($firstname) || empty($email) || empty($password)) {
     echo json_encode([
         'success' => false,
         'message' => 'Tous les champs sont requis'
@@ -26,17 +31,32 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// 3. Vérifier la longueur du mot de passe
+// 3. Vérifier la force du mot de passe
 if (strlen($password) < 8) {
     echo json_encode([
         'success' => false,
-        'message' => 'Le mot de passe doit avoir au minimum 8 caractères'
+        'message' => 'Le mot de passe doit avoir au moins 8 caractères'
+    ]);
+    exit;
+}
+
+if (!preg_match('/[0-9]/', $password)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Le mot de passe doit contenir au moins 1 chiffre'
+    ]);
+    exit;
+}
+
+if (!preg_match('/[!@#$%^&*]/', $password)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Le mot de passe doit contenir au moins 1 caractère spécial (!@#$%^&*)'
     ]);
     exit;
 }
 
 // ========== CONNEXION À LA BASE DE DONNÉES ==========
-// À adapter selon votre configuration
 
 $dbHost = 'localhost';
 $dbUser = 'root';
@@ -58,7 +78,7 @@ try {
     exit;
 }
 
-// ========== VÉRIFIER SI L'EMAIL EXISTE DÉJÀ ==========
+// ========== VÉRIFIER QUE L'EMAIL N'EXISTE PAS DÉJÀ ==========
 
 $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
 $stmt->execute([$email]);
@@ -71,30 +91,29 @@ if ($stmt->rowCount() > 0) {
     exit;
 }
 
-// ========== HASHER LE MOT DE PASSE ==========
+// ========== HACHER LE MOT DE PASSE ==========
 
 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-// ========== INSÉRER L'UTILISATEUR ==========
+// ========== INSÉRER L'UTILISATEUR DANS LA BASE ==========
+
+$stmt = $pdo->prepare('
+    INSERT INTO users (name, firstname, email, password, created_at) 
+    VALUES (?, ?, ?, ?, NOW())
+');
 
 try {
-    $stmt = $pdo->prepare('
-        INSERT INTO users (name, email, password, created_at) 
-        VALUES (?, ?, ?, NOW())
-    ');
+    $stmt->execute([$name, $firstname, $email, $hashedPassword]);
     
-    $stmt->execute([$name, $email, $hashedPassword]);
-
-    // Succès
     echo json_encode([
         'success' => true,
-        'message' => 'Compte créé avec succès ! Redirection en cours...'
+        'message' => 'Compte créé avec succès ! Redirection vers la connexion...'
     ]);
-
 } catch (PDOException $e) {
     echo json_encode([
         'success' => false,
         'message' => 'Erreur lors de la création du compte'
     ]);
 }
+
 ?>
