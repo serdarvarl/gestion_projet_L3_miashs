@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Free - Data Moode</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #6B3FB8;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #6B3FB8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .plan-badge {
+            background: #f3e8ff;
+            color: #6B3FB8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #6B3FB8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6B3FB8;
+            border: 2px solid #6B3FB8;
+        }
+
+        .btn-secondary:hover {
+            background: #f3e8ff;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* Upgrade Banner */
+        .upgrade-banner {
+            background: linear-gradient(135deg, #6B3FB8 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upgrade-banner-content h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .upgrade-banner-content p {
+            font-size: 14px;
+            color: #e9d5ff;
+        }
+
+        .upgrade-banner .btn {
+            background: white;
+            color: #6B3FB8;
+        }
+
+        .upgrade-banner .btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-bottom: 15px;
+        }
+
+        .insight-box {
+            background: #f3e8ff;
+            border-left: 4px solid #6B3FB8;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .insight-box strong {
+            color: #6B3FB8;
+        }
+
+        /* Stats Display */
+        .stat-display {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #6B3FB8;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-badge.positive::before {
+            content: "↑";
+            font-weight: bold;
+        }
+
+        /* Data Section */
+        .data-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            margin-top: 30px;
+        }
+
+        .data-section h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .data-info {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .data-info strong {
+            color: #92400e;
+        }
+
+        .api-example {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #6B3FB8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 20px 30px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .upgrade-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">📊</div>
+                <span>Data Moode</span>
+            </div>
+            <div class="header-actions">
+                <span class="plan-badge">Plan FREE</span>
+                <button class="btn btn-secondary" onclick="alert('Paramètres')">⚙️ Paramètres</button>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>📊 Vos Comparaisons Clés</h1>
+            <p>Accédez à 6 analyses pré-configurées pour comprendre vos utilisateurs</p>
+        </div>
+
+        <!-- Upgrade Banner -->
+        <div class="upgrade-banner">
+            <div class="upgrade-banner-content">
+                <h3>Passez à PRO pour débloquer plus de fonctionnalités</h3>
+                <p>Analyses illimitées, export PDF/PNG, accès API complet...</p>
+            </div>
+            <button class="btn" onclick="upgradeToPro()">Essayer PRO →</button>
+        </div>
+
+        <!-- Charts Cards -->
+        <div class="cards-grid">
+            <!-- Card 1: Comparaison Temporelle -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Comparaison Temporelle 2020 vs 2024</h3>
+                    <p class="card-description">Voir l'évolution du comportement client</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartTemporel"></canvas>
+                </div>
+                <div class="loading" id="loading-temporel">
+                    <div class="spinner"></div>
+                    <span>Chargement des données...</span>
+                </div>
+                <div class="insight-box" id="insight-temporel" style="display: none;">
+                    <strong>📈 Insight:</strong> <span id="insight-temporel-text"></span>
+                </div>
+            </div>
+
+            <!-- Card 2: Nombre de Pays Actifs -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Nombre de Pays Actifs</h3>
+                    <p class="card-description">Expansion géographique</p>
+                </div>
+                <div class="stat-display" id="stat-countries">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <span>Chargement...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Genre Dominant -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Genre Dominant</h3>
+                    <p class="card-description">Répartition actuelle</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartGenre"></canvas>
+                </div>
+                <div class="loading" id="loading-genre">
+                    <div class="spinner"></div>
+                    <span>Chargement des données...</span>
+                </div>
+            </div>
+
+            <!-- Card 4: Adoption des Plateformes -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Adoption des Plateformes (2020 vs 2024)</h3>
+                    <p class="card-description">Évolution par plateforme</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartPlatforms"></canvas>
+                </div>
+                <div class="loading" id="loading-platforms">
+                    <div class="spinner"></div>
+                    <span>Chargement des données...</span>
+                </div>
+                <div class="insight-box" id="insight-platforms" style="display: none;">
+                    <strong>🚀 Insight:</strong> <span id="insight-platforms-text"></span>
+                </div>
+            </div>
+
+            <!-- Card 5: Top Pays -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top 5 Pays Actifs</h3>
+                    <p class="card-description">Classement par volume d'activité</p>
+                </div>
+                <div id="top-countries-list" class="loading">
+                    <div class="spinner"></div>
+                    <span>Chargement des données...</span>
+                </div>
+            </div>
+
+            <!-- Card 6: Impact Photo Profil + Ancienneté -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Impact Photo Profil + Ancienneté sur les Ventes</h3>
+                    <p class="card-description">Corrélation entre ancienneté et performances</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartScatter"></canvas>
+                </div>
+                <div class="loading" id="loading-scatter">
+                    <div class="spinner"></div>
+                    <span>Chargement des données...</span>
+                </div>
+                <div class="insight-box" id="insight-scatter" style="display: none;">
+                    <strong>✅ Insight:</strong> <span id="insight-scatter-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 
+            ============================================
+            DOCUMENTATION POUR LE DÉVELOPPEUR (PYTHON)
+            ============================================
+            
+            Cette page appelle 6 fonctions Python via une API REST.
+            
+            1️⃣ MODIFIER L'URL DE L'API (ligne 280 du code JavaScript):
+               const API_BASE_URL = 'http://localhost:5000';
+            
+            2️⃣ CRÉER CES 6 ENDPOINTS PYTHON:
+               
+               @app.route('/api/get_temporal_comparison', methods=['POST'])
+               def get_temporal_comparison():
+                   return jsonify([
+                       { "year": "2020", "femmes": 45, "hommes": 55, "pays": 28 },
+                       { "year": "2024", "femmes": 60, "hommes": 40, "pays": 40 }
+                   ])
+
+               @app.route('/api/get_gender_distribution', methods=['POST'])
+               def get_gender_distribution():
+                   return jsonify([
+                       { "name": "Femmes", "value": 60 },
+                       { "name": "Hommes", "value": 40 }
+                   ])
+
+               @app.route('/api/get_platform_adoption', methods=['POST'])
+               def get_platform_adoption():
+                   return jsonify([
+                       { "platform": "Web", "2020": 65, "2024": 70 },
+                       { "platform": "Android", "2020": 20, "2024": 35 },
+                       { "platform": "iOS", "2020": 15, "2024": 60 }
+                   ])
+
+               @app.route('/api/get_photo_seniority_impact', methods=['POST'])
+               def get_photo_seniority_impact():
+                   return jsonify([
+                       { "anciennete": 2, "ventes": 15, "hasPhoto": true },
+                       { "anciennete": 5, "ventes": 35, "hasPhoto": true }
+                   ])
+
+               @app.route('/api/get_top_countries', methods=['POST'])
+               def get_top_countries():
+                   return jsonify([
+                       { "name": "France", "value": 45, "emoji": "🇫🇷" },
+                       { "name": "Allemagne", "value": 32, "emoji": "🇩🇪" },
+                       { "name": "Espagne", "value": 18, "emoji": "🇪🇸" },
+                       { "name": "Italie", "value": 4, "emoji": "🇮🇹" },
+                       { "name": "Belgique", "value": 1, "emoji": "🇧🇪" }
+                   ])
+
+               @app.route('/api/get_countries_stats', methods=['POST'])
+               def get_countries_stats():
+                   return jsonify({ "2020": 28, "2024": 40 })
+            
+            3️⃣ N'OUBLIE PAS D'ACTIVER CORS:
+               from flask_cors import CORS
+               app = Flask(__name__)
+               CORS(app)
+            
+            ✅ Voilà ! Les graphiques se rempliront automatiquement !
+        -->
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Data Moode. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Configuration API Python
+        const API_BASE_URL = 'http://localhost:5000'; // À adapter selon le serveur Python
+        
+        // Variables pour les graphiques
+        let charts = {};
+
+        // ============================================
+        // FONCTION PRINCIPALE - Charger toutes les données
+        // ============================================
+        async function loadDashboardData() {
+            try {
+                // APPEL 1: Récupérer les données temporelles
+                const temporalData = await callPythonFunction('get_temporal_comparison');
+                renderTemporalChart(temporalData);
+
+                // APPEL 2: Récupérer les données de genre
+                const genderData = await callPythonFunction('get_gender_distribution');
+                renderGenderChart(genderData);
+
+                // APPEL 3: Récupérer les données de plateformes
+                const platformData = await callPythonFunction('get_platform_adoption');
+                renderPlatformChart(platformData);
+
+                // APPEL 4: Récupérer les données scatter (photo + ancienneté)
+                const scatterData = await callPythonFunction('get_photo_seniority_impact');
+                renderScatterChart(scatterData);
+
+                // APPEL 5: Récupérer le top 5 des pays
+                const topCountries = await callPythonFunction('get_top_countries');
+                renderTopCountries(topCountries);
+
+                // APPEL 6: Récupérer les stats des pays
+                const countriesStats = await callPythonFunction('get_countries_stats');
+                displayCountriesStats(countriesStats);
+
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+                alert('Impossible de charger les données. Vérifiez que votre serveur Python est actif.');
+            }
+        }
+
+        // ============================================
+        // FONCTION HELPER - Appeler une fonction Python
+        // ============================================
+        async function callPythonFunction(functionName, params = {}) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/${functionName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur ${response.status}: ${functionName} non trouvée`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error(`Erreur lors de l'appel à ${functionName}:`, error);
+                throw error;
+            }
+        }
+
+        // ============================================
+        // GRAPHIQUE 1: Comparaison Temporelle
+        // ============================================
+        function renderTemporalChart(data) {
+            const ctx = document.getElementById('chartTemporel');
+            if (!ctx) return;
+            
+            document.getElementById('loading-temporel').style.display = 'none';
+            
+            if (charts.temporel) charts.temporel.destroy();
+            
+            charts.temporel = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.year),
+                    datasets: [
+                        {
+                            label: 'Femmes %',
+                            data: data.map(d => d.femmes),
+                            borderColor: '#6B3FB8',
+                            backgroundColor: 'rgba(107, 63, 184, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Hommes %',
+                            data: data.map(d => d.hommes),
+                            borderColor: '#D4B5E8',
+                            backgroundColor: 'rgba(212, 181, 232, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Pays actifs',
+                            data: data.map(d => d.pays),
+                            borderColor: '#CCCCCC',
+                            borderWidth: 2,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { usePointStyle: true }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            const femmesDiff = data[1].femmes - data[0].femmes;
+            document.getElementById('insight-temporel-text').textContent = 
+                `Le genre féminin a ${femmesDiff > 0 ? 'augmenté' : 'diminué'} de ${Math.abs(femmesDiff)}% en 4 ans`;
+            document.getElementById('insight-temporel').style.display = 'block';
+        }
+
+        // ============================================
+        // GRAPHIQUE 2: Genre Dominant
+        // ============================================
+        function renderGenderChart(data) {
+            const ctx = document.getElementById('chartGenre');
+            if (!ctx) return;
+            
+            document.getElementById('loading-genre').style.display = 'none';
+            
+            if (charts.genre) charts.genre.destroy();
+            
+            charts.genre = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: ['#6B3FB8', '#D4B5E8'],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { usePointStyle: true }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // GRAPHIQUE 3: Adoption des Plateformes
+        // ============================================
+        function renderPlatformChart(data) {
+            const ctx = document.getElementById('chartPlatforms');
+            if (!ctx) return;
+            
+            document.getElementById('loading-platforms').style.display = 'none';
+            
+            if (charts.platforms) charts.platforms.destroy();
+            
+            charts.platforms = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.platform),
+                    datasets: [
+                        {
+                            label: '2020',
+                            data: data.map(d => d['2020']),
+                            backgroundColor: '#CCCCCC'
+                        },
+                        {
+                            label: '2024',
+                            data: data.map(d => d['2024']),
+                            backgroundColor: '#6B3FB8'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            const iosData = data.find(d => d.platform === 'iOS');
+            if (iosData) {
+                const iosDiff = iosData['2024'] - iosData['2020'];
+                document.getElementById('insight-platforms-text').textContent = 
+                    `iOS App adoption +${iosDiff}%`;
+                document.getElementById('insight-platforms').style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // GRAPHIQUE 4: Impact Photo Profil + Ancienneté
+        // ============================================
+        function renderScatterChart(data) {
+            const ctx = document.getElementById('chartScatter');
+            if (!ctx) return;
+            
+            document.getElementById('loading-scatter').style.display = 'none';
+            
+            if (charts.scatter) charts.scatter.destroy();
+            
+            const avecPhoto = data.filter(d => d.hasPhoto);
+            const sansPhoto = data.filter(d => !d.hasPhoto);
+            
+            charts.scatter = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Avec photo',
+                            data: avecPhoto.map(d => ({
+                                x: d.anciennete,
+                                y: d.ventes,
+                                r: 8
+                            })),
+                            backgroundColor: '#6B3FB8'
+                        },
+                        {
+                            label: 'Sans photo',
+                            data: sansPhoto.map(d => ({
+                                x: d.anciennete,
+                                y: d.ventes,
+                                r: 8
+                            })),
+                            backgroundColor: '#CCCCCC'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Ancienneté (mois)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Ventes'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            document.getElementById('insight-scatter-text').textContent = 
+                'Photo de profil + compte ancien = +35% ventes';
+            document.getElementById('insight-scatter').style.display = 'block';
+        }
+
+        // ============================================
+        // AFFICHAGE: Top 5 Pays
+        // ============================================
+        function renderTopCountries(data) {
+            const container = document.getElementById('top-countries-list');
+            container.innerHTML = '';
+            
+            let html = '<div>';
+            data.forEach((country, index) => {
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 18px;">${country.emoji}</span>
+                                <span style="font-weight: ${index === 0 ? 'bold' : 'normal'}; color: ${index === 0 ? '#6B3FB8' : '#1f2937'}">
+                                    ${index + 1}. ${country.name}
+                                </span>
+                            </div>
+                            <span style="color: ${index === 0 ? '#6B3FB8' : '#6b7280'}">${country.value}%</span>
+                        </div>
+                        <div style="width: 100%; background: #e5e7eb; border-radius: 4px; height: 8px;">
+                            <div style="height: 100%; background: ${index === 0 ? '#6B3FB8' : '#D4B5E8'}; border-radius: 4px; width: ${country.value}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // AFFICHAGE: Statistiques Pays
+        // ============================================
+        function displayCountriesStats(data) {
+            const container = document.getElementById('stat-countries');
+            
+            const yearDiff = data['2024'] - data['2020'];
+            const percentDiff = ((yearDiff / data['2020']) * 100).toFixed(1);
+            
+            container.innerHTML = `
+                <div class="stat-number">${data['2024']}</div>
+                <div class="stat-label">pays actifs en 2024</div>
+                <div class="stat-badge positive">
+                    +${yearDiff} pays (+${percentDiff}%)
+                </div>
+            `;
+        }
+
+        // ============================================
+        // Fonctions utilitaires
+        // ============================================
+        function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function upgradeToPro() {
+            window.location.href = 'subscription.html';
+        }
+
+        // Charger les données au chargement de la page
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>

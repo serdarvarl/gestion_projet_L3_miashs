@@ -128,35 +128,6 @@
             display: block;
         }
 
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-            cursor: pointer;
-        }
-
-        .form-options a {
-            color: #6B3FB8;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .form-options a:hover {
-            text-decoration: underline;
-        }
-
         button {
             width: 100%;
             padding: 12px;
@@ -262,14 +233,6 @@
                     <input type="password" id="password" name="password" required placeholder="Votre mot de passe">
                 </div>
 
-                <div class="form-options">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="remember" name="remember">
-                        <label for="remember" style="margin: 0;">Se souvenir de moi</label>
-                    </div>
-                    <a href="#forgot">Mot de passe oublié ?</a>
-                </div>
-
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
                     <p style="margin-top: 10px; color: #6B3FB8;">Connexion en cours...</p>
@@ -295,7 +258,6 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
 
             // Validation côté client
             if (!email || !password) {
@@ -307,15 +269,15 @@
             loading.style.display = 'block';
             submitBtn.disabled = true;
 
-            // AJAX REQUEST
+            // Créer les données du formulaire
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+
+            // AJAX REQUEST vers le PHP
             fetch('api/login.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'email=' + encodeURIComponent(email) + 
-                      '&password=' + encodeURIComponent(password) +
-                      '&remember=' + (remember ? 1 : 0)
+                body: formData
             })
             .then(response => response.json())
             .then(data => {

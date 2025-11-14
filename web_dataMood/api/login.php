@@ -7,7 +7,6 @@ session_start();
 // Récupérer les données POST
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
-$remember = $_POST['remember'] ?? 0;
 
 // ========== VALIDATIONS ==========
 
@@ -53,7 +52,7 @@ try {
 
 // ========== CHERCHER L'UTILISATEUR ==========
 
-$stmt = $pdo->prepare('SELECT id, name, email, password FROM users WHERE email = ?');
+$stmt = $pdo->prepare('SELECT id, name, firstname, email, password FROM users WHERE email = ?');
 $stmt->execute([$email]);
 
 if ($stmt->rowCount() === 0) {
@@ -80,24 +79,8 @@ if (!password_verify($password, $user['password'])) {
 
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['user_name'] = $user['name'];
+$_SESSION['user_firstname'] = $user['firstname'];
 $_SESSION['user_email'] = $user['email'];
-
-// ========== GÉRER LA CASE "SE SOUVENIR DE MOI" ==========
-
-if ($remember == 1) {
-    // Créer un token pour le cookie "Se souvenir de moi"
-    $rememberToken = bin2hex(random_bytes(32));
-    
-    // Sauvegarder le token en base de données (optionnel)
-    $stmt = $pdo->prepare('
-        UPDATE users SET remember_token = ?, remember_token_expires = DATE_ADD(NOW(), INTERVAL 30 DAY) 
-        WHERE id = ?
-    ');
-    $stmt->execute([$rememberToken, $user['id']]);
-    
-    // Créer le cookie (30 jours)
-    setcookie('remember_token', $rememberToken, time() + (30 * 24 * 60 * 60), '/');
-}
 
 // ========== SUCCÈS ==========
 

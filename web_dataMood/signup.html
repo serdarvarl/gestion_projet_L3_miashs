@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Data Moode</title>
+    <title>S'inscrire - Data Moode</title>
     <style>
         * {
             margin: 0;
@@ -90,7 +90,7 @@
         input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 2px solid #e5e7eb;
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
@@ -101,6 +101,27 @@
             outline: none;
             border-color: #6B3FB8;
             box-shadow: 0 0 0 3px rgba(107, 63, 184, 0.1);
+        }
+
+        input.valid {
+            border-color: #4CAF50;
+            background-color: #f0fff0;
+        }
+
+        input.invalid {
+            border-color: #f44336;
+            background-color: #fff0f0;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
         }
 
         .message-alert {
@@ -131,24 +152,28 @@
         button {
             width: 100%;
             padding: 12px;
-            background: #6B3FB8;
+            background: #ccc;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
+            cursor: not-allowed;
             transition: all 0.3s ease;
         }
 
-        button:hover {
+        button:enabled {
+            background: #6B3FB8;
+            cursor: pointer;
+        }
+
+        button:enabled:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
 
         button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .form-footer {
@@ -217,38 +242,53 @@
                     <div class="logo-text">Data Moode</div>
                 </div>
                 <h1>Créer un compte</h1>
-                <p>Inscrivez-vous pour commencer</p>
+                <p>Rejoignez Data Moode gratuitement</p>
             </div>
 
             <div id="message" class="message-alert"></div>
 
             <form id="signupForm">
+                <!-- NOM -->
                 <div class="form-group">
-                    <label for="name">Nom complet</label>
-                    <input type="text" id="name" name="name" required placeholder="Jean Dupont">
+                    <label for="name">Nom</label>
+                    <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    <div class="error-message"></div>
                 </div>
 
+                <!-- PRÉNOM -->
                 <div class="form-group">
-                    <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email" required placeholder="vous@exemple.com">
+                    <label for="firstname">Prénom</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Votre prénom" required>
+                    <div class="error-message"></div>
                 </div>
 
+                <!-- EMAIL -->
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <!-- MOT DE PASSE -->
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required placeholder="Minimum 8 caractères">
+                    <input type="password" id="password" name="password" placeholder="Min 8 caractères, 1 chiffre, 1 spécial" required>
+                    <div class="error-message"></div>
                 </div>
 
+                <!-- CONFIRMATION MOT DE PASSE -->
                 <div class="form-group">
-                    <label for="password_confirm">Confirmer mot de passe</label>
-                    <input type="password" id="password_confirm" name="password_confirm" required placeholder="Confirmez votre mot de passe">
+                    <label for="password2">Confirmer mot de passe</label>
+                    <input type="password" id="password2" name="password2" placeholder="Confirmez votre mot de passe" required>
+                    <div class="error-message"></div>
                 </div>
 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p style="margin-top: 10px; color: #6B3FB8;">Création en cours...</p>
+                    <p style="margin-top: 10px; color: #6B3FB8;">Inscription en cours...</p>
                 </div>
 
-                <button type="submit" id="submitBtn">Créer un compte</button>
+                <button type="submit" id="submitBtn" disabled>Créer mon compte</button>
             </form>
 
             <div class="form-footer">
@@ -263,43 +303,120 @@
         const loading = document.getElementById('loading');
         const submitBtn = document.getElementById('submitBtn');
 
+        // Les champs à valider
+        const fields = ['name', 'firstname', 'email', 'password', 'password2'];
+
+        // VALIDATION EN TEMPS RÉEL
+        fields.forEach(fieldName => {
+            const input = document.getElementById(fieldName);
+            input.addEventListener('input', function() {
+                validateField(fieldName);
+                updateButtonState();
+            });
+        });
+
+        function validateField(fieldName) {
+            const input = document.getElementById(fieldName);
+            const errorMsg = input.closest('.form-group').querySelector('.error-message');
+            let isValid = false;
+            let message = '';
+
+            if (fieldName === 'name') {
+                if (input.value.trim().length < 2) {
+                    message = 'Le nom doit avoir au moins 2 caractères';
+                } else {
+                    isValid = true;
+                }
+            }
+
+            if (fieldName === 'firstname') {
+                if (input.value.trim().length < 2) {
+                    message = 'Le prénom doit avoir au moins 2 caractères';
+                } else {
+                    isValid = true;
+                }
+            }
+
+            if (fieldName === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value)) {
+                    message = 'Email invalide';
+                } else {
+                    isValid = true;
+                }
+            }
+
+            if (fieldName === 'password') {
+                const pwd = input.value;
+                if (pwd.length < 8) {
+                    message = 'Min 8 caractères';
+                } else if (!/[0-9]/.test(pwd)) {
+                    message = 'Au moins 1 chiffre requis';
+                } else if (!/[!@#$%^&*]/.test(pwd)) {
+                    message = 'Au moins 1 caractère spécial (!@#$%^&*)';
+                } else {
+                    isValid = true;
+                }
+            }
+
+            if (fieldName === 'password2') {
+                const pwd1 = document.getElementById('password').value;
+                if (input.value !== pwd1) {
+                    message = 'Les mots de passe ne correspondent pas';
+                } else if (input.value.length > 0) {
+                    isValid = true;
+                }
+            }
+
+            // Appliquer les styles
+            if (input.value.length > 0) {
+                if (isValid) {
+                    input.classList.remove('invalid');
+                    input.classList.add('valid');
+                    errorMsg.classList.remove('show');
+                } else {
+                    input.classList.remove('valid');
+                    input.classList.add('invalid');
+                    errorMsg.textContent = message;
+                    errorMsg.classList.add('show');
+                }
+            } else {
+                input.classList.remove('valid', 'invalid');
+                errorMsg.classList.remove('show');
+            }
+
+            return isValid;
+        }
+
+        function updateButtonState() {
+            const allValid = fields.every(fieldName => validateField(fieldName));
+            submitBtn.disabled = !allValid;
+        }
+
+        // SOUMETTRE LE FORMULAIRE
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const name = document.getElementById('name').value.trim();
+            const firstname = document.getElementById('firstname').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const passwordConfirm = document.getElementById('password_confirm').value;
-
-            // Validation côté client
-            if (!name || !email || !password || !passwordConfirm) {
-                showMessage('Tous les champs sont requis', 'error');
-                return;
-            }
-
-            if (password.length < 8) {
-                showMessage('Le mot de passe doit avoir au minimum 8 caractères', 'error');
-                return;
-            }
-
-            if (password !== passwordConfirm) {
-                showMessage('Les mots de passe ne correspondent pas', 'error');
-                return;
-            }
 
             // Montrer le spinner
             loading.style.display = 'block';
             submitBtn.disabled = true;
 
-            // AJAX REQUEST
+            // Créer les données du formulaire
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('firstname', firstname);
+            formData.append('email', email);
+            formData.append('password', password);
+
+            // AJAX REQUEST vers le PHP
             fetch('api/signup.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'name=' + encodeURIComponent(name) + 
-                      '&email=' + encodeURIComponent(email) + 
-                      '&password=' + encodeURIComponent(password)
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -308,7 +425,6 @@
 
                 if (data.success) {
                     showMessage(data.message, 'success');
-                    form.reset();
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 2000);

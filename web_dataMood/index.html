@@ -2,17 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Permet d'adapter le site à la taille de l'écran (mobile, tablette, ordinateur) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Data Moode - Dashboard d'analyse comportementale</title>
     <style>
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur et la hauteur */
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: sans-serif;
             color: #333;
             line-height: 1.6;
         }
@@ -25,13 +26,13 @@
 
         /* HEADER */
         header {
-            border-bottom: 1px solid #e5e7eb;
-            padding: 20px 0;
-            position: sticky;
+            border-bottom: 2px solid #e5e7eb;  /* Ligne grise en bas */
+            padding: 20px 0; /* Espace intérieur */
+            position: sticky; /* Reste en haut quand tu scrolls ( entre un relative et fixed) */
             top: 0;
             background: white;
-            z-index: 50;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            z-index: 50; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);  /* Au-dessus des autres éléments */
         }
 
         header .container {
@@ -68,18 +69,18 @@
         }
 
         .header-buttons {
-            display: flex;
-            gap: 15px;
+            display: flex; 
+            gap: 15px; /* Espace de 15px entre les éléments du conteneur */
         }
 
         .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 10px 20px;  /* Espace intérieur */ 
+            border-radius: 6px; /* Coins arrondis */
+            cursor: pointer; /* La souris devient cliquable */
             font-size: 14px;
             font-weight: 600;
             border: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; /* Animation lisse quand tu passes dessus */
             text-decoration: none;
             display: inline-block;
         }
