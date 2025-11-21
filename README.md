@@ -10,6 +10,7 @@ Il nous reste à écrire le rapport et à préparer la soutenance.
 - Importez le fichier de données  `datamoodbd.sql` dans votre phpMyAdmin.
     -   Le serveur doit être connecté à la bonne base de données.
 - Démarrez `api_server.py`.
+    - il utilis la table "analis_view"
     -   Celui-ci doit être connecté à phpMyAdmin.
     -   Pour demarer le program installer requirements.txt methode ecrire dans la readme(place dans le readme)
 - Lancez le site web sur votre serveur local.
