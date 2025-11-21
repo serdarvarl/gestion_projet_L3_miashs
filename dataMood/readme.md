@@ -1,6 +1,55 @@
 # dataMood
 
-Projet data visualitation python, javascript
+Projet de visualisation de données avec Python (Flask) et JavaScript.
+
+## Manuel d'installation et de démarrage
+
+Suivez ces étapes pour configurer et lancer le projet sur votre machine locale.
+
+### 1. Prérequis
+
+Assurez-vous que Python 3 est installé sur votre système.
+
+### 2. Installation de l'environnement virtuel
+
+Ouvrez un terminal dans le répertoire `dataMood` et suivez les commandes ci-dessous.
+
+**a. Créez un environnement virtuel :**
+```bash
+python -m venv .venv
+```
+
+**b. Activez l'environnement virtuel :**
+
+*   **Sur Windows (Invite de commandes ou PowerShell) :**
+    ```cmd
+    .venv\Scripts\activate
+    ```
+
+*   **Sur macOS / Linux :**
+    ```bash
+    source .venv/bin/activate
+    ```
+    *(Une fois activé, le nom de l'environnement `(.venv)` devrait apparaître au début de la ligne de votre terminal.)*
+
+**c. Installez les dépendances :**
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Lancement du projet
+
+Une fois l'environnement configuré, vous pouvez démarrer le serveur et accéder à l'application.
+
+**a. Démarrez le serveur API :**
+Assurez-vous que votre base de données (phpMyAdmin) est active, puis lancez le serveur Flask.
+```bash
+python exploitation_data/api_server.py
+```
+Le terminal devrait indiquer que le serveur est en cours d'exécution ("Running on http://...").
+
+**b. Ouvrez le site web :**
+Naviguez vers le dossier `exploitation_data/web` et ouvrez le fichier `index.html` dans votre navigateur web.
 
 ### requirements
 
