@@ -1,14 +1,15 @@
 # gestion_projet_L3_miashs
- Analyser le comportement des clients et les ventes sur une plateforme E-commerce
-
-
+Analyse du comportement des clients et des ventes sur une plateforme e-commerce.
 
 https://www.kaggle.com/datasets/jmmvutu/ecommerce-users-of-a-french-c2c-fashion-store
 
+Il nous reste à écrire le rapport et à préparer la soutenance.
 
+## Pour démarrer le programme
 
-
-
-Brancharli temizle
-yeni branchlar ac 
-insanlara manueli yolla ona gore gelistirmeye basla
+- Importez le fichier de données  `datamoodbd.sql` dans votre phpMyAdmin.
+    -   Le serveur doit être connecté à la bonne base de données.
+- Démarrez `api_server.py`.
+    -   Celui-ci doit être connecté à phpMyAdmin.
+- Lancez le site web sur votre serveur local.
+    -   Allez dans le dossier `web` qui se trouve dans le répertoire `exploitation_data`.
