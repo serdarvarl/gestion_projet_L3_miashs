@@ -11,5 +11,6 @@ Il nous reste à écrire le rapport et à préparer la soutenance.
     -   Le serveur doit être connecté à la bonne base de données.
 - Démarrez `api_server.py`.
     -   Celui-ci doit être connecté à phpMyAdmin.
+    -   Pour demarer le program installer requirements.txt methode ecrire dans la readme(place dans le readme)
 - Lancez le site web sur votre serveur local.
     -   Allez dans le dossier `web` qui se trouve dans le répertoire `exploitation_data`.
