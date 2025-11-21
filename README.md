@@ -25,7 +25,7 @@ Suivez ces étapes pour configurer et lancer le projet sur votre machine locale.
 
 1.  Démarrez votre serveur Apache et MySQL.
 2.  Ouvrez **phpMyAdmin**.
-3.  Créez une nouvelle base de données (par exemple, `gestion_projet`).
+3.  Créez une nouvelle base de données (par exemple, `datamoodbd`).
 4.  Sélectionnez la base de données que vous venez de créer, puis allez dans l'onglet **Importer**.
 5.  Importez le fichier `datamoodbd.sql` fourni dans le projet.
 
