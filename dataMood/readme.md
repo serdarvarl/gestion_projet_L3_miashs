@@ -53,11 +53,17 @@ Naviguez vers le dossier `exploitation_data/web` et ouvrez le fichier `index.htm
 
 ### requirements
 
-python -m venv .venv
+```bash
 
-source .venv/bin/activate (Aktifleştir)
+    python -m venv .venv
 
-pip install -r requirements.txt
+    source .venv/bin/activate (Aktifleştir)
+
+
+    pip install -r requirements.txt
+```
+
+
 
 blinker==1.9.0
 click==8.3.0
