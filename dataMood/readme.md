@@ -64,7 +64,8 @@ Naviguez vers le dossier `exploitation_data/web` et ouvrez le fichier `index.htm
 ```
 
 
-
+Si au cas creer un text copy-past
+```text
 blinker==1.9.0
 click==8.3.0
 contourpy==1.3.3
@@ -87,3 +88,5 @@ scipy==1.16.3
 six==1.17.0
 tzdata==2025.2
 Werkzeug==3.1.3
+
+```
