@@ -1,6 +1,5 @@
 # dataMood
-
-Projet de visualisation de données avec Python (Flask) et JavaScript.
+Projet de visualisation de données avec Python (Flask) et PHP.
 
 ## Manuel d'installation et de démarrage
 
